@@ -1,0 +1,55 @@
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# IDE and editor settings
+.vscode/
+.idea/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Test and coverage output
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+
+# Local database files
+database/*.db
+database/*.sqlite
+database/*.sqlite3
+
+# Generated detection logs and runtime results
+results/detection_log.csv
+results/*.log
+
+# Dataset files 
+dataset/*
+!dataset/README.md
+
+
+models/*.keras
+models/*.h5
+models/*.hdf5
+
+
+.ipynb_checkpoints/

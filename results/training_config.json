@@ -1,0 +1,23 @@
+{
+    "image_size": [
+        128,
+        128
+    ],
+    "batch_size": 32,
+    "epochs": 30,
+    "learning_rate": 0.001,
+    "random_seed": 42,
+    "class_mapping": {
+        "without_mask": 0,
+        "with_mask": 1
+    },
+    "optimizer": "Adam",
+    "loss": "binary_crossentropy",
+    "architecture": "CNN",
+    "augmentation": [
+        "Horizontal Flip",
+        "Random Rotation",
+        "Random Zoom",
+        "Random Translation"
+    ]
+}

@@ -1,0 +1,12 @@
+{
+    "test_accuracy": 0.7165217391304348,
+    "test_precision": 0.8205741626794258,
+    "test_recall": 0.7958236658932715,
+    "test_f1_score": 0.8080094228504122,
+    "total_test_images": 1150,
+    "confidence_threshold": 0.5,
+    "class_mapping": {
+        "without_mask": 0,
+        "with_mask": 1
+    }
+}

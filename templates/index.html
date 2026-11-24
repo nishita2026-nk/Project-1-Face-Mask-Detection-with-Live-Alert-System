@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Mask Detection Dashboard</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>Face Mask Detection Dashboard</h1>
+            <p>Real-Time Monitoring and Detection Analytics</p>
+        </header>
+
+        <section class="stats-grid">
+
+            <div class="stat-card">
+                <h3>With Mask</h3>
+                <h2>{{ stats.mask_detections }}</h2>
+            </div>
+
+            <div class="stat-card">
+                <h3>Without Mask</h3>
+                <h2>{{ stats.no_mask_detections }}</h2>
+            </div>
+
+            <div class="stat-card">
+                <h3>Total Face Detections</h3>
+                <h2>{{ stats.total_face_detections }}</h2>
+            </div>
+
+            <div class="stat-card">
+                <h3>Average Confidence</h3>
+                <h2>{{ "%.2f"|format(stats.average_confidence) }}%</h2>
+            </div>
+
+        </section>
+
+        <section class="stats-grid">
+
+            <div class="stat-card">
+                <h3>Average MASK Confidence</h3>
+                <h2>{{ "%.2f"|format(stats.average_mask_confidence) }}%</h2>
+            </div>
+
+            <div class="stat-card">
+                <h3>Average NO MASK Confidence</h3>
+                <h2>{{ "%.2f"|format(stats.average_no_mask_confidence) }}%</h2>
+            </div>
+
+        </section>
+
+        <section class="charts-grid">
+
+            <div class="chart-card">
+                <h2>Detection Confidence Analysis</h2>
+                <canvas id="confidenceChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h2>Mask Detection Comparison</h2>
+                <canvas id="categoryChart"></canvas>
+            </div>
+
+        </section>
+
+        <section class="history-section">
+
+            <h2>Detection History</h2>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Timestamp</th>
+                            <th>Detection</th>
+                            <th>Confidence</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for record in records %}
+                        <tr>
+                            <td>{{ record[0] }}</td>
+                            <td>{{ record[1] }}</td>
+                            <td>
+                                <span class="{{ 'mask' if record[2] == 'MASK' else 'no-mask' }}">
+                                    {{ record[2] }}
+                                </span>
+                            </td>
+                            <td>{{ "%.2f"|format(record[3]) }}%</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4">No detection records found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+    </div>
+
+    <div id="chart-data" data-labels='{{ chart_labels | tojson }}' data-values='{{ chart_values | tojson }}'
+        data-category-labels='{{ category_labels | tojson }}' data-category-values='{{ category_values | tojson }}'>
+    </div>
+
+    <script>
+        const dataElement = document.getElementById("chart-data");
+
+        const labels = JSON.parse(dataElement.dataset.labels);
+        const values = JSON.parse(dataElement.dataset.values);
+
+        const categoryLabels = JSON.parse(
+            dataElement.dataset.categoryLabels
+        );
+
+        const categoryValues = JSON.parse(
+            dataElement.dataset.categoryValues
+        );
+
+        new Chart(document.getElementById("confidenceChart"), {
+            type: "line",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Confidence (%)",
+                    data: values,
+                    borderWidth: 2,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+
+        new Chart(document.getElementById("categoryChart"), {
+            type: "doughnut",
+            data: {
+                labels: categoryLabels,
+                datasets: [{
+                    data: categoryValues
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+        setTimeout(function () {
+            window.location.reload();
+        }, 5000);
+    </script>
+
+</body>
+
+</html>
